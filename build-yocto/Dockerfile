@@ -1,15 +1,21 @@
-FROM ubuntu:16.10
+FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get -y upgrade
+
+#RUN apt-get update && apt-get -y upgrade
+RUN apt-get update  
+RUN apt-get install
+RUN rm -rf /var/lib/apt/lists/*
 
 # Required Packages for the Host Development System
-# http://www.yoctoproject.org/docs/latest/mega-manual/mega-manual.html#required-packages-for-the-host-development-system
-RUN apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib \
-        build-essential chrpath socat cpio python3 python3-pip python3-pexpect python-is-python3 \
-        xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev \
-        pylint3 xterm
+# https://embeddeduse.com/2019/02/11/using-docker-containers-for-yocto-builds/
+
+RUN apt-get update && apt-get -y install gawk wget git-core \
+    diffstat unzip texinfo gcc-multilib build-essential \
+    chrpath socat cpio python python3 python3-pip \
+    python3-pexpect xz-utils debianutils iputils-ping \
+    libsdl1.2-dev xterm tar locales
 
 # Additional host packages required by poky/scripts/wic
 RUN apt-get install -y curl dosfstools mtools parted syslinux tree zip
