@@ -28,7 +28,9 @@ RUN chmod a+x /usr/local/bin/repo
 RUN id jenkins 2>/dev/null || useradd --uid 1000 --create-home jenkins
 
 # Create a non-root user that will perform the actual build
-RUN id build 2>/dev/null || useradd --uid 30000 --create-home build
+#RUN id build 2>/dev/null || useradd --uid 30000 --create-home build
+RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+
 RUN apt-get install -y sudo
 RUN echo "build ALL=(ALL) NOPASSWD: ALL" | tee -a /etc/sudoers
 
@@ -44,8 +46,8 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-USER build
+USER docker
 WORKDIR /home/build
-CMD "/bin/bash"
+CMD /bin/bash
 
 # EOF
